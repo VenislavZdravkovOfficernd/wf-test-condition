@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: dist
+    outputs:
+      result : 
+        description: 'Name of the artifact to upload'
+        value: ${{jobs.deploy.outputs.outcome}}
     # secrets: 
     #   GITHUB_TOKEN:
     #     description: 'GitHub token'
@@ -15,6 +19,8 @@ on:
     # commented because I don't need sectrets for this learning task
 jobs:
   deploy: 
+    outputs: 
+        outcome: ${{ steps.set-result.outputs.step-result }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -25,3 +31,6 @@ jobs:
         run: ls -l  
       - name: Output information
         run: echo "deplyoing...."
+      - name: Set result output 
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT"
