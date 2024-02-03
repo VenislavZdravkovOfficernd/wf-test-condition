@@ -18,7 +18,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        run: yarn intsall
+        run: yarn
       - name: Lint code
         run: yarn lint
   test:
@@ -37,8 +37,10 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Test code
+        id: test-code
         run: yarn test
       - name: Upload test report
+        if: failure() && steps.test-code.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: test-report
